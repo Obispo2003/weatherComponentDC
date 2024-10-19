@@ -7,18 +7,34 @@ function App() {
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=895284fb2d2c50a520ea537456963d9c`
 
-  const searchLocation = (event) => {
+  
+  const searchLocation = async (event) => {
     if (event.key === 'Enter') {
-      axios.get(url).then((response) => {
+      try{
+      
+        const response = await axios.get(url)
         setData(response.data)
         console.log(response.data)
-      })
-      setLocation('')
-    } 
-    
+      
+      } 
+      catch 
+      {
+      
+        window.location.reload()
+      
+      } 
+      finally 
+      {
+      
+        setLocation('')
+      
+      }
+    }
   }
-
   return (
+
+    //user types in possible location, api searches based on coordinates
+    //displays temperature and "What feels like" temperature
     <div className="app">
       <div className="search">
         <input
@@ -27,7 +43,6 @@ function App() {
           onKeyPress={searchLocation}
           placeholder='Enter Location'
           type="text" />
-          
       </div>
       <div className="container">
         <div className="top">
@@ -41,26 +56,6 @@ function App() {
             {data.weather ? <p>{data.weather[0].main}</p> : null}
           </div>
         </div>
-
-        {data.name !== undefined &&
-          <div className="bottom">
-            <div className="feels">
-              {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°F</p> : null}
-              <p>Feels Like</p>
-            </div>
-            <div className="humidity">
-              {data.main ? <p className='bold'>{data.main.humidity}%</p> : null}
-              <p>Humidity</p>
-            </div>
-            <div className="wind">
-              {data.wind ? <p className='bold'>{data.wind.speed.toFixed()} MPH</p> : null}
-              <p>Wind Speed</p>
-            </div>
-          </div>
-        }
-
-
-
       </div>
     </div>
   );
